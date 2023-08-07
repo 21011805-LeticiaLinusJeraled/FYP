@@ -1,0 +1,21 @@
+<header>
+  <nav class="header">
+  <a href="/techcentral" class="logo"><img src="/images/main/Techcentral.png" alt="logo" style="width: 25%;" /></a>
+    <div class="header-right">
+      <a sec:authorize="hasRole('USER')"><a href="/items">Shop</a></a>
+      <a sec:authorize="hasRole('USER')"><a href="/items/add">Sell</a></a>
+      <a sec:authorize="hasRole('USER')"><a href="/cart">Cart</a></a> 
+      <a sec:authorize="hasRole('USER')"><a href="/purchaseHistory">Purchase History</a></a>
+      <a sec:authorize="hasRole('USER')"><a href="/profile">Profile</a></a> 
+      <a sec:authorize="hasRole('ADMIN')"><a href="/admin">Admins</a></a> 
+      <a sec:authorize="hasRole('ADMIN')"><a href="/banUser">User Dashboard</a></a>
+      <a sec:authorize="hasRole('ADMIN')"><a href="/adminDashboard">Item Dashboard</a></a>
+      <div class="login-signup">
+        <a sec:authorize="!isAuthenticated()" class="nav-link" href="/login">Login/Sign Up</a>
+        <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="">
+          <button class="btn nav-link" type="submit">Logout</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Techcentral - Profile Listings</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<script src="/bootstrap/css/bootstrap.js"></script>
+<style>
+th, td {
+	text-align: left;
+}
+
+td {
+	border: none;
+}
+
+.product-image {
+	width: 100px;
+	height: 100px;
+}
+
+.table-container {
+	margin-top: 20px;
+}
+
+.table-container table {
+	border-collapse: separate;
+	border-spacing: 0 10px;
+}
+
+.table-container th {
+	font-weight: bold;
+	color: #333;
+	padding: 10px;
+}
+
+.table-container td {
+	padding: 10px;
+	vertical-align: middle;
+}
+
+.product-name {
+	font-weight: bold;
+}
+
+.product-description {
+	color: #666;
+}
+
+.product-price {
+	color: red;
+}
+
+.product-quantity {
+	color: #28a745;
+}
+
+.product-category {
+	font-style: italic;
+}
+
+.go-back-button {
+	margin-top: 20px;
+}
+
+.btn-secondary {
+	background-color: #007bff;
+}
+
+.btn-secondary hover {
+	background-color: #007bff;
+}
+</style>
+</head>
+
+<body>
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header"></div>
+	<div class="container">
+		<main>
+		<br>
+			<div class="h3">
+				<b>Profile Listings</b>
+			</div>
+
+			<div class="table-container">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Image</th>
+							<th>Item Name</th>
+							<th>Description</th>
+							<th>Price</th>
+							<th>Quantity</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="listing : ${itemList}">
+							<td>
+							<img th:src="@{'/uploads/items/' + ${listing.id} + '/' + ${listing.imgName}}"
+								alt="Product Image" class="product-image" />
+							</td>
+							
+							<td>
+								<div class="product-name" th:text="${listing.name}"></div>
+							</td>
+							
+							<td>
+								<div class="product-description"
+									th:text="${listing.description}"></div>
+							</td>
+							
+							<td>
+								<div class="product-price" th:text="${listing.price}"></div>
+							</td>
+							
+							<td>
+								<div class="product-quantity" th:text="${listing.quantity}"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="go-back-button">
+				<a href="/profile" class="btn btn-secondary">Go Back</a>
+			</div>
+		</main>
+	</div>
+	<div th:replace="fragments/footer"></div>
+</body>
+
+</html>

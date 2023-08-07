@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Techcentral - Item Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+	<!-- Header and navigation sections -->
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header"></div>
+
+	<!-- Main content of the admin dashboard -->
+	<br>
+	<div class="container admin-content">
+		<h2 class="admin-title"><b>Admin Dashboard</b></h2>
+		<p>View and manage items and reports here.</p>
+
+		<!-- Check if the user has admin role -->
+		<div sec:authorize="hasRole('ADMIN')">
+			<!-- Section to display all items -->
+			<div class="admin-section">
+				<h3>All Items</h3>
+				<table class="table admin-table">
+					<!-- Table header -->
+					<thead>
+						<tr>
+							<th>Item ID</th>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Price</th>
+							<th>Quantity</th>
+							<th>Report Count</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<!-- Table body -->
+					<tbody>
+						<!-- Iterate over itemList to display each item -->
+						<tr th:each="item : ${itemList}">
+							<td th:text="${item.id}"></td>
+							<td th:text="${item.name}"></td>
+							<td th:text="${item.description}"></td>
+							<td th:text="${item.price}"></td>
+							<td th:text="${item.quantity}"></td>
+							<td th:text="${item.reportCount}"></td>
+							<td><a th:href="@{/items/edit/{id}(id=${item.id})}"
+								class="btn btn-primary">Edit</a> <a href="#"
+								class="btn btn-danger"
+								th:onclick="showDeleteConfirmation([[${item.id}]], [[${item.name}]], [[@{/items/delete/{id}(id=${item.id})}]])">Delete</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Section to display reported items -->
+			<div class="admin-section">
+				<h3>Reported Items</h3>
+				<table class="table admin-table">
+					<!-- Table header -->
+					<thead>
+						<tr>
+							<th>Item ID</th>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Reported Count</th>
+							<th>Reported Reason</th>
+						</tr>
+					</thead>
+					<!-- Table body -->
+					<tbody>
+						<!-- Iterate over reportedItemList to display each reported item -->
+						<tr th:each="reportedItem : ${reportedItemList}">
+							<td th:text="${reportedItem.id}"></td>
+							<td th:text="${reportedItem.name}"></td>
+							<td th:text="${reportedItem.description}"></td>
+							<td th:text="${reportedItem.getReportCount}"></td>
+							<td th:text="${reportedItem.getReportReason}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- If the user does not have admin role -->
+		<div sec:authorize="!hasRole('ADMIN')">
+			<p>You are not authorized to access this page.</p>
+		</div>
+	</div>
+
+	<!-- Delete Confirmation Modal -->
+	<div class="modal fade" id="deleteModal" tabindex="-1"
+		aria-labelledby="deleteModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>
+						Are you sure you want to delete the item with ID <span id="itemId"></span>
+						and name <span id="itemName"></span>?
+					</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Cancel</button>
+					<a id="deleteConfirmButton" class="btn btn-danger"
+						th:href="${'@{' + deleteUrl + '}'}">Delete</a>
+				</div>
+			</div>
+		</div>
+	</div>
+  <div th:replace="fragments/footer"></div>
+	<!-- JavaScript code -->
+	<script th:inline="javascript">
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+
+        function showDeleteConfirmation(itemId, itemName, deleteUrl) {
+            const itemIdSpan = document.getElementById('itemId');
+            const itemNameSpan = document.getElementById('itemName');
+            const deleteConfirmButton = document.getElementById('deleteConfirmButton');
+			console.log(itemId)
+            itemIdSpan.textContent = itemId;
+            itemNameSpan.textContent = itemName;
+            deleteConfirmButton.href = deleteUrl;
+
+            deleteModal.show();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Techcentral - View Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<script src="/bootstrap/css/bootstrap.js"></script>
+</head>
+<div th:replace="fragments/style"></div>
+<div th:replace="fragments/header"></div>
+<style>
+table {
+    border-collapse: collapse;
+    width: 150%;
+    max-width: 2000px; /* Increased max-width for a bigger table */
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f8f8f8;
+  }
+
+  tr:hover {
+    background-color: #f2f2f2;
+  }
+
+  td {
+    border-bottom: 1px solid #ccc;
+  }
+
+  td:last-child {
+    border-right: none;
+  }
+
+  th:last-child {
+    border-right: none;
+  }
+</style>
+<body>
+  <div class="container">
+    <main>
+    <br>
+      <div class="h3">
+        <b>All Admins</b>
+      </div>
+      <div class="alert alert-primary" role="alert" th:text="${success}" th:if="${success}"></div>
+
+      <table class="table bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th><a sec:authorize="hasRole('ADMIN')">Actions</a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="member : ${listMembers}">
+            <td th:text="${member.name}"></td>
+            <td th:text="${member.username}"></td>
+            <td th:text="${member.email}"></td>
+            <td>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/delete/{id}(id=${member.id})}">Remove</a>
+          </tr>
+        </tbody>
+      </table>
+      <form action="/admin/add" method="get" sec:authorize="hasRole('ADMIN')">
+        <button type="submit" class="btn btn-primary">Add Admin</button>
+      </form>
+    </main>
+  </div>
+  <div th:replace="fragments/footer"></div>
+</body>
+
+<script>
+function myFunction() {
+  let text;
+  if (confirm("Confirm?") == true) {
+    text = "You pressed OK!";
+  } else {
+    text = "You canceled!";
+  }
+  document.getElementById("demo").innerHTML = text;
+}
+</script>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Techcentral - Payment successful</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="/bootstrap/js/bootstrap.js"></script>
+<script
+	src="https://www.paypal.com/sdk/js?client-id=AVNwe7yo5Yg1WOLOf2p1igv7RLi70DwI7F4P3ggDEh4tOljwTFGdUC9VqqltPCGcGZRhGD8_kuc38OFE&currency=SGD&components=buttons">
+</script>
+</head>
+<style>
+.btn-primary {
+	margin-left: 150%;
+}
+</style>
+<body>
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header"></div>
+	<div class="container">
+		<main>
+			<div class="container ">
+				<div class="row fs-1 text-center">
+					<h3>
+					<br>
+						<b>Order Summary</b>
+					</h3>
+					<h5>
+						Transaction ID: <span th:text="${transactionId}"></span> <br>
+						Order ID: <span th:text="${orderId}"></span> <br> 
+						Total Cost $ <span th:text="${cartTotal}"></span> <br> 
+						Thank you for shopping with Techcentral!
+					</h5>
+				</div>
+				<div class="row mb-5">
+					<div class="col-8">
+						<div class="container ">
+							<div class="row m-3 border-top border-bottom fs-5">
+								<div class="col">Items</div>
+								<div class="col">Price</div>
+								<div class="col">Quantity</div>
+								<div class="col">Subtotal</div>
+							</div>
+
+							<div class="row m-3 border-bottom"
+								th:each="cartItem : ${cartItemList}">
+								<!-- Item name, description, image -->
+								<div class="col mb-3">
+									<h5 th:text="${cartItem.item.name}"></h5>
+									<p th:text="${cartItem.item.description}"></p>
+									<img width="100px" th:src="@{/uploads/items/{id}/{imageName}(id=${cartItem.item.id}, imageName=${cartItem.item.imgName})}">
+								</div>
+
+								<div class="col align-self-center"
+									th:text="'$'+${cartItem.item.price}"></div>
+								<div class="col align-self-center"
+									th:text="${cartItem.quantity}"></div>
+								<div class="col align-self-center" th:text="'$'+${cartTotal}"></div>
+							</div>
+
+							<div class="row  m-3 fw-bold">
+								<div class="col fs-6">
+									<p>FINAL TOTAL:</p>
+								</div>
+								<div class="col fs-6 text-end">
+									<p id="cartTotal" th:text="'$'+${cartTotal}"></p>
+								</div>
+								<form>
+									<a th:href="@{/}" class="btn btn-primary">Home</a>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+	<div th:replace="fragments/footer"></div>
+</body>
+</html>
+

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Techcentral - View Single Item</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<style>
+.form-label {
+	width: 5%;
+}
+</style>
+<body>
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header"></div>
+	<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+				<br>
+					<h3><b th:text="${item.name}"></b></h3>
+					<b><span th:text="${item.description}"></span></b> <br><br><br>
+					<img style="width: 25%; height: 55%;" th:src="@{/uploads/items/{id}/{imageName}(id=${item.id}, imageName=${item.imgName})}" />
+				</div>
+
+				<div class="col-md-4">
+				<br>
+					<h3><b>Ratings & Reviews</b></h3>
+					<div th:each="review : ${reviews}">
+					<div th:if="${review.member != null}">
+						<p>
+							<b>Reviewed by:</b> <span th:text="${review.member.username}"></span>
+						</p>
+					</div>
+						<p><b>Ratings:</b> <span th:text="${review.rating} + ' / 5'"></span></p>
+						<p><b>Reviews:</b> <span th:text="${review.reviewText}"></span></p>
+						<img th:src="@{/uploads/items/{id}/{imageName}(id=${review.id}, imageName=${review.reviewImage})}" style="width: 100px; height: auto;" />
+					</div>
+				</div>
+			</div>
+	</div>
+	<div th:replace="fragments/footer"></div>
+</body>
+</html>

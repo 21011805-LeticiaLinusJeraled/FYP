@@ -1,0 +1,96 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org">
+<title>Techcentral - FAQs</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="/bootstrap/css/bootstrap.js"></script>
+<head>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 20px;
+	background-color: #f5f5f5;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+	text-align: center;
+}
+
+.faq-section {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.faq-box {
+	width: 40%;
+	border: 1px solid #ccc;
+	padding: 20px;
+	margin: 10px auto;
+	background-color: #ffffff;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.faq-question {
+	cursor: pointer;
+	color: #333;
+	margin: 10px 0;
+	font-weight: bold;
+}
+
+.faq-answer {
+	display: none;
+	padding: 10px;
+	background-color: #f3f3f3;
+}
+</style>
+</head>
+<body>
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header"></div>
+	<div class="container">
+		<h2><b>Frequently Asked Questions</b></h2>
+		<div class="faq-section">
+			<!-- Shipping Questions -->
+			<div class="faq-box">
+				<h5 class="faq-question" onclick="toggleAnswer('answer1')">What
+					are the shipping options?</h5>
+				<div id="answer1" class="faq-answer">We only offer standard
+					shipping.</div>
+				<h5 class="faq-question" onclick="toggleAnswer('answer2')">How
+					do I track my order?</h5>
+				<div id="answer2" class="faq-answer">All orders will be
+					delivered between 1-2 weeks.</div>
+				<h5 class="faq-question" onclick="toggleAnswer('answer3')">Do
+					you ship internationally?</h5>
+				<div id="answer3" class="faq-answer">Yes, we ship to most
+					countries.</div>
+			</div>
+
+			<!-- Payment Questions -->
+			<div class="faq-box">
+				<h5 class="faq-question" onclick="toggleAnswer('answer4')">What
+					payment methods are accepted?</h5>
+				<div id="answer4" class="faq-answer">We accept PayPal, credit
+					and debit card.</div>
+				<h5 class="faq-question" onclick="toggleAnswer('answer5')">Is
+					my payment information secure?</h5>
+				<div id="answer5" class="faq-answer">Yes, all transactions are
+					encrypted and secured.</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/footer"></div>
+	<script>
+		function toggleAnswer(id) {
+			var answer = document.getElementById(id);
+			var display = answer.style.display;
+			answer.style.display = display === "block" ? "none" : "block";
+		}
+	</script>
+</body>
+</html>

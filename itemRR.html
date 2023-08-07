@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Techcentral - Item ratings & Reviews</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<script src="/bootstrap/js/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<style>
+body {
+	font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+h3 {
+	margin-top: 10px;
+	text-align: center;
+	font-family: arial;
+}
+
+.item-rating {
+	width: 400px;
+	margin: 0 auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+}
+
+label {
+	font-weight: bold;
+}
+
+input, textarea {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+textarea {
+	height: 200px;
+}
+
+select {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+select i {
+	font-size: 16px;
+	color: orange;
+}
+</style>
+<body>
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header"></div>
+	<div class="item-rating">
+		<form th:action="@{/submitReview/items/{id}(id=${item.id})}"
+			method="post">
+			<input type="hidden" name="item.id" th:value="${item.id}" /> <label
+				for="rating">Rating:</label> <select id="item-rating" name="rating">
+				<option value="1">1 star</option>
+				<option value="2">2 stars</option>
+				<option value="3">3 stars</option>
+				<option value="4">4 stars</option>
+				<option value="5">5 stars</option>
+			</select><br> <br> <label for="item-image">Image:</label> <input
+				type="file" id="item-image" name="reviewImage"> <br> <br>
+			<label for="item-review">Review:</label>
+			<textarea id="item-review" name="reviewText"
+				placeholder="Write a review for the item"></textarea>
+			<input type="submit" value="Submit Review">
+		</form>
+	</div>
+	<div th:replace="fragments/footer"></div>
+</body>
+</html>

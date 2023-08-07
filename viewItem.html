@@ -1,0 +1,399 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Techcentrals - View Items</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script> 
+<script defer 
+ src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script> 
+<script defer 
+ src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script> 
+
+
+</head>
+<style>
+.form-label {
+	width: 60px;
+}
+
+/* Outer container for the items */
+.items-box {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+/* Item container */
+.item-container {
+	width: 32%;
+	margin-bottom: 20px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+}
+
+.item-container img {
+	max-width: 100%;
+	height: auto;
+	margin-bottom: 10px;
+}
+
+.search-bar-container {
+	display: flex;
+	align-items: center;
+}
+
+.search-label {
+	margin-right: 10px;
+}
+
+.search-input {
+	padding: 12px 15px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	flex: 1;
+	outline: none; /* Remove the default outline */
+	transition: border-color 0.2s ease;
+	/* Smooth transition on border color change */
+}
+
+/* Style when the input is focused */
+.search-input:focus {
+	border-color: #007bff; /* Change the border color when focused */
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+	/* Add a subtle box shadow when focused */
+}
+
+/* Style the search button */
+.search-button {
+	padding: 12px 18px;
+	font-size: 16px;
+	border: none;
+	border-radius: 20px;
+	background-color: #007bff;
+	color: #fff;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	/* Smooth transition on background color change */
+}
+
+/* Hover style for the search button */
+.search-button:hover {
+	background-color: #0056b3;
+}
+
+.currency-select.from {
+	display: none;
+}
+
+.currency-button {
+	display: inline-block;
+	border-radius: 4px;
+	background-color: #0d6efd;
+	border: none;
+	color: white;
+	text-align: center;
+	font-size: 15px;
+	padding: 8px;
+	width: 100px;
+	margin: 5px;
+}
+
+.currency-select {
+	display: inline-block;
+	border-radius: 4px;
+	border-color: black;
+	color: black;
+	text-align: center;
+	font-size: 13px;
+	padding: 5px;
+	width: 70px;
+	margin: 5px;
+}
+
+.bar {
+	height: 20px;
+	background-color: #4285f4;
+	max-width: 100%;
+}
+
+.product-details {
+	text-align: left;
+}
+
+.graph-container {
+	margin-top: 10px;
+}
+
+.go-back-button {
+	margin-top: 20px;
+}
+
+.confirm-popup { 
+ display: none; 
+ position: fixed; 
+ top: 50%; 
+ left: 50%; 
+ transform: translate(-50%, -50%); 
+ background-color: #ffffff; 
+ padding: 20px; 
+ box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); 
+ z-index: 9999; 
+ border-radius: 8px; 
+} 
+ 
+.confirm-popup p { 
+ margin: 0; 
+ padding: 10px 0; 
+} 
+ 
+.confirm-buttons { 
+ display: flex; 
+ justify-content: flex-end; 
+ margin-top: 15px; 
+} 
+ 
+.confirm-buttons button { 
+ padding: 8px 20px; 
+ border: none; 
+ cursor: pointer; 
+ font-weight: bold; 
+ border-radius: 4px; 
+ margin-left: 10px; 
+} 
+ 
+.confirm-buttons button:first-child { 
+ background-color: #007bff; 
+ color: #fff; 
+} 
+ 
+.confirm-buttons button:last-child { 
+ background-color: #eee; 
+ color: #333; 
+} 
+</style>
+<body>
+
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header"></div>
+
+	<div class="container">
+		<br>
+		<h3>Top 3 Trending Products</h3>
+		<div th:each="itemWithQuantity : ${top3Items}"
+			class="row border p-3 mb-3">
+			<div class="col-md-8 product-details">
+				<strong>Name:</strong> <span th:text="${itemWithQuantity[0].name}"></span><br />
+				<strong>Description:</strong> <span
+					th:text="${itemWithQuantity[0].description}"></span><br /> <strong>Quantity
+					Sold:</strong> <span th:text="${itemWithQuantity[1]}"></span>
+			</div>
+			<div class="col-md-4 graph-container">
+				<div class="bar"
+					th:style="'width:' + ${itemWithQuantity[1]} * 10 + 'px;'"></div>
+			</div>
+		</div>
+
+		<div id="currency-converter"></div>
+		<br>
+		<div class="search-bar-container">
+			<label class="search-label" for="search-input">Search Item:</label> <input
+				type="text" id="search-input" class="search-input"
+				placeholder="Enter item name...">
+		</div>
+		<br>
+		<div class="items-box" id="test">
+			<!-- Start of item container loop -->
+			<div th:each="item : ${listItems}" class="item-container">
+				<h3>
+					<span th:text="${item.name}"></span>
+				</h3>
+				<br> <a th:href="@{/items/{id}(id=${item.id})}"> <img
+					th:src="@{/uploads/items/{id}/{imageName}(id=${item.id}, imageName=${item.imgName})}" /><br></a>
+
+				<b>Seller:</b> <span th:text="${item.member.username}"></span></br> <b>Description:</b>
+				<span th:text="${item.description}"></span><br> <b>Price:</b> <span
+					class="item-price" th:value="${item.price}"
+					th:text="'$'+${item.price}"></span><br> <b>Stock:</b> <span
+					th:text="${item.quantity}"></span><br>
+
+				<form th:action="@{/cart/add/{itemId}(itemId=${item.id})}"
+					method="post">
+					<label><b>Quantity:</b></label> <input type="number"
+						name="quantity" class="form-label" value="1"><br>
+					<button type="submit" class="btn btn-primary">Add to Cart</button>
+					<a th:attr="onclick='showConfirmPopup(\'' + ${item.id} + '\')' "
+						class="btn btn-primary"
+						style="border-color: red; background-color: red;">Report</a>
+				</form>
+				<!-- Confirmation pop-up -->
+				<div class="confirm-popup" id="confirmPopup">
+					<div class="container">
+						<h4 class="mb-3">Report Item</h4>
+						<p>Choose a reason for reporting:</p>
+						<select id="reportReason" class="form-select mb-3">
+							<option value="itemMismatch">Item Mismatch</option>
+							<option value="illegalItem">Illegal / Prohibited Item</option>
+						</select>
+						<div class="confirm-buttons">
+							<button onclick="confirmReport()" class="btn btn-primary">Confirm</button>
+							<button onclick="hideConfirmPopup()" class="btn btn-secondary">Cancel</button>
+						</div>
+					</div>
+				</div>
+
+				<input type="hidden" id="itemId"> <br> <br>
+			</div>
+			<!-- End of item container loop -->
+		</div>
+	</div>
+	<div th:replace="fragments/footer"></div>
+
+	<script>
+	 var currencyConverter = document.getElementById("currency-converter"); // Retrieves an element with the ID "currency-converter" above
+
+	    var form = document.createElement("form");   // Create the currency conversion form elements
+	    form.addEventListener("submit", function (event) { // Event listener to handle form submission
+	        event.preventDefault();
+	        convertCurrency();
+	    });
+
+	    // createCurrencySelect() function is called to create two currency select elements, fromCurrencySelect and toCurrencySelect
+	    var fromCurrencySelect = createCurrencySelect("from", " ", ["SGD"]); 
+	    var toCurrencySelect = createCurrencySelect("to", "Convert Currency: ", ["USD", "MYR", "EUR", "GBP", "JPY"].sort()); // Currencies sorted alphabetically
+	    var convertButton = document.createElement("button");
+	    convertButton.className = "currency-button";
+	    convertButton.textContent = "Convert";
+
+	    form.appendChild(fromCurrencySelect);
+	    form.appendChild(toCurrencySelect);
+	    form.appendChild(convertButton);
+
+	    currencyConverter.appendChild(form);
+	 
+	    // A helper function that creates a currency select element that takes in three parameters
+	    function createCurrencySelect(name, label, options) {
+	        var selectLabel = document.createElement("label");
+	        selectLabel.textContent = label;
+
+	        var select = document.createElement("select");
+	        select.name = name;
+	        select.className = "currency-select " + name; // Add a class with the name of the currency (from/to) for the select element
+
+	        options.sort().forEach(function (option) { // Sort the options alphabetically
+	            var optionElement = document.createElement("option");
+	            optionElement.value = option;
+	            optionElement.textContent = option;
+	            select.appendChild(optionElement);
+	        });
+
+	        var selectContainer = document.createElement("div");
+	        selectContainer.appendChild(selectLabel);
+	        selectContainer.appendChild(select);
+
+	        return selectContainer;
+	    }
+
+	    // Function is called when the form is submitted
+	    function convertCurrency() { 
+	        // Retrieve the selected currency values
+	        var fromCurrency = "SGD";
+	        var toCurrency = toCurrencySelect.querySelector("select").value;
+	        var apiUrl = "https://api.exchangerate-api.com/v4/latest/" + fromCurrency;
+	        fetch(apiUrl) // fetch() function is used to make an API call to retrieve the exchange rates data
+	        
+	        // Converts the response to JSON format
+	            .then(function (response) {
+	                return response.json();
+	            })
+	            .then(function (data) {
+	                var exchangeRate = data.rates[toCurrency]; // Exchange rate for the selected "to" currency is extracted from the data.rates object
+	                console.log(exchangeRate);
+
+	                if (exchangeRate) { // Check if exchangeRate is available
+	                    // Perform the currency conversion for each item price
+	                    var itemPrices = document.querySelectorAll(".item-price"); // Item prices are selected using querySelectorAll() with the class name "item-price"
+	                    console.log(itemPrices);
+
+	                    // The price value from each item and calculates the converted price based on the exchange rate.
+	                    itemPrices.forEach(function (itemPrice) {
+	                        var price = parseFloat(itemPrice.getAttribute('value'));
+	                        var convertedPrice = price * exchangeRate;
+	                        itemPrice.textContent = convertedPrice.toFixed(2) + " " + toCurrency;
+	                    });
+
+	                    // Update the currency conversion result message
+	                    // currencyConverter.textContent = "Currency conversion rate: 1 " + fromCurrency + " = " + exchangeRate.toFixed(2) + " " + toCurrency;
+	                } else {
+	                    currencyConverter.textContent = "Invalid currency code or conversion rate"; 
+	                }
+	            })
+	            .catch(function (error) {
+	                console.log(error);
+	                currencyConverter.textContent = "Error fetching exchange rate data"; //  Error message if there are any errors during the API call
+	            });
+	    }
+    
+		function handleSearch() {
+			var searchQuery = document.getElementById("search-input").value
+					.toLowerCase(); // Get the search query and convert to lowercase for case-insensitive search
+
+			var itemContainers = document
+					.getElementsByClassName("item-container"); // Get all item containers
+
+			for (var i = 0; i < itemContainers.length; i++) {
+				var itemName = itemContainers[i].querySelector("h3").textContent
+						.toLowerCase(); // Get the item name from each item container and convert to lowercase
+
+				// Check if the search query is a substring of the item name
+				if (itemName.includes(searchQuery)) {
+					itemContainers[i].style.display = "block"; // Show the item container if it matches the search query
+				} else {
+					itemContainers[i].style.display = "none"; // Hide the item container if it doesn't match the search query
+				}
+			}
+		}
+
+		// Event listener for the search input field
+		document.getElementById("search-input").addEventListener("input", handleSearch);
+		
+		// Event listener for the search input field 
+		  document.getElementById("search-input").addEventListener("input", handleSearch); 
+		   
+		  function showConfirmPopup(itemId) { 
+		        var confirmPopup = document.getElementById("confirmPopup"); 
+		        confirmPopup.style.display = "block"; 
+		        // Store the itemId in a hidden field to use it when confirming the report 
+		        document.getElementById("itemId").value = itemId; 
+		    } 
+		 
+		    function hideConfirmPopup() { 
+		        var confirmPopup = document.getElementById("confirmPopup"); 
+		        confirmPopup.style.display = "none"; 
+		    } 
+		 
+		    function confirmReport() { 
+		        var reportReasonSelect = document.getElementById("reportReason"); 
+		        var selectedReason = reportReasonSelect.options[reportReasonSelect.selectedIndex].text; 
+		        var itemId = document.getElementById("itemId").value; 
+		        window.alert("You have reported the item with ID " + itemId + " for reason: " + selectedReason); 
+		        $.ajax({ 
+		         type: "GET", 
+		         data: { reportReason: selectedReason} , 
+		            url: "/items/report/" + itemId , 
+		            dataType: "JSON", 
+//		            success: function (data) { 
+		                 
+//		            } 
+		        }); 
+		        hideConfirmPopup(); 
+		    } 
+	</script>
+</body>
+</html>

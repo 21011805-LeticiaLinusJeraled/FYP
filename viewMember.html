@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Techcentral - View Member</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<script src="/bootstrap/css/bootstrap.js"></script>
+</head>
+<div th:replace="fragments/style"></div>
+<div th:replace="fragments/header"></div>
+<style>
+th, td {
+	text-align: left;
+}
+
+td {
+	border: none;
+}
+
+/* Additional style for the dropdown container */
+.dropdown-container {
+	display: none;
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 200px;
+	padding: 10px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+</style>
+<body>
+	<div class="container">
+		<main>
+			<br>
+			<div class="h3">
+				<b>All Users</b>
+			</div>
+			<div class="alert alert-primary" role="alert" th:text="${success}"
+				th:if="${success}"></div>
+
+			<table class="table bordered">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Username</th>
+						<th>Email</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="member : ${listMembers}">
+
+						<td th:text="${member.name}"></td>
+						<td th:text="${member.username}"></td>
+						<td th:text="${member.email}"></td>
+					</tr>
+				</tbody>
+			</table>
+			<form action="/members/add" method="get"
+				sec:authorize="hasRole('ADMIN')">
+				<button type="submit" class="btn btn-primary">Register
+					Member</button>
+			</form>
+		</main>
+	</div>
+	<div th:replace="fragments/footer"></div>
+</body>
+
+<script>
+	function myFunction() {
+		let text;
+		if (confirm("Confirm?") == true) {
+			text = "You pressed OK!";
+		} else {
+			text = "You canceled!";
+		}
+		document.getElementById("demo").innerHTML = text;
+	}
+
+	document
+			.getElementById("reportButton")
+			.addEventListener(
+					"click",
+					function() {
+						document.getElementById("reportDropdown").style.display = "block";
+					});
+
+	document
+			.getElementById("confirmButton")
+			.addEventListener(
+					"click",
+					function() {
+						// Code to handle the 'confirm' action here
+						// For example, you can submit the selected reason using AJAX or perform any other action as needed.
+						alert("Reason submitted!");
+						// Hide the dropdown after the confirmation
+						document.getElementById("reportDropdown").style.display = "none";
+					});
+</script>
+</html>

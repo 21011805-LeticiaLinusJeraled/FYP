@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Techcentral - Shopping Cart</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="/bootstrap/js/bootstrap.js"></script>
+<script
+	src="https://www.paypal.com/sdk/js?client-id=AVNwe7yo5Yg1WOLOf2p1igv7RLi70DwI7F4P3ggDEh4tOljwTFGdUC9VqqltPCGcGZRhGD8_kuc38OFE&currency=SGD&components=buttons">
+</script>
+</head>
+<body>
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header"></div>
+	<main>
+		<div class="container ">
+			<div class="row fs-2 text-center">
+			</div>
+			<div class="row mb-5">
+
+				<div class="col-8">
+					<div class="container ">
+						<div class="row m-3 border-bottom fs-5">
+							<div class="col">
+								<b>Items</b>
+							</div>
+							<div class="col">
+								<b>Price</b>
+							</div>
+							<div class="col">
+								<b>Quantity</b>
+							</div>
+							<div class="col">
+								<b>Subtotal</b>
+							</div>
+						</div>
+						<div class="row m-3 border-bottom"
+							th:each="cartItem : ${cartItemList}">
+							<div class="col mb-3">
+								<h5 th:text="${cartItem.item.name}"></h5>
+								<p th:text="${cartItem.item.description}"></p>
+								<img width="100px"
+									th:src="@{/uploads/items/{id}/{imageName}(id=${cartItem.item.id}, imageName=${cartItem.item.imgName})}">
+							</div>
+
+							<div class="col align-self-center" th:text="'$'+${cartItem.item.price}"></div>
+
+
+							<div class="col align-self-center">
+								<form th:action="@{/cart/update/{id} (id=${cartItem.id})}" method="post">
+								<input type="number" th:value="${cartItem.quantity}" name="qty" th:id="${cartItem.id}" class="form-label" min="1" />
+									<button type="submit" class="btn btn-primary">Update</button>
+									<a th:href="@{/cart/remove/{id} (id=${cartItem.id})}" class="btn btn-primary" style="border-color: red; background-color: red;">Delete</a>
+								</form>
+							</div>
+
+							<div class="col align-self-center"
+								th:text="'$'+${cartItem.subTotal}"></div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-4">
+					<div class="container ">
+						<br>
+						<div class="row  m-3 border-bottom fw-bold">
+							<div class="col text-center fs-3">ORDER SUMMARY</div>
+						</div>
+
+						<div class="row  m-3 border-top border-bottom"
+							th:each="cartItem : ${cartItemList}">
+							<div class="col fs-6">
+								<p th:text="${cartItem.item.name} + ' * ' + ${cartItem.quantity}"></p>
+							</div>
+							<div class="col fs-6 text-end">
+								<p th:text="${cartItem.subTotal}"></p>
+							</div>
+						</div>
+
+						<div class="row  m-3 border-bottom fw-bold">
+							<div class="col fs-6">
+								<p>TOTAL</p>
+							</div>
+							<div class="col fs-6 text-end">
+								<p id="cartTotal" th:text="'$'+${cartTotal}"></p>
+							</div>
+						</div>
+						<div th:replace="fragments/paypal"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<div th:replace="fragments/footer"></div>
+</body>
+</html>

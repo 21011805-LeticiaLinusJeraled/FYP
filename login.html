@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Techcentral - Login/Sign Up</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<script src="/bootstrap/js/bootstrap.js"></script>
+</head>
+<style>
+.form-control {
+	width: 20%;
+}
+
+form i {
+	margin-left: -30px;
+	cursor: pointer;
+}
+</style>
+<body>
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header2"></div>
+	<div class="container">
+		<main>
+			<form th:action="@{/login}" method="post">
+				<br>
+				<div class="h3">
+					<b>Please Login/Sign Up</b>
+				</div>
+				<div th:if="${param.error}" class="alert alert-danger"> Invalid username or password</div>
+				<div th:if="${param.logout}" class="alert alert-success">You have been logged out</div>
+
+				<label for="username" class="form-label">Username: </label> 
+				<input type="text" class="form-control" id="username" name="username" /><br>
+
+				<label for="password" class="form-label">Password: </label> 
+				<input type="password" class="form-control" id="password" name="password" />
+				<input type="checkbox" onclick="myFunction()"> Show
+
+				<div class="mt-3">
+					<button type="submit" class="btn btn-primary">Login</button>
+					<a href="/members/add" class="btn btn-primary">Sign Up</a>
+				</div>
+			</form>
+		</main>
+	</div>
+	<div th:replace="fragments/footer"></div>
+</body>
+<script>
+	function myFunction() {
+		var x = document.getElementById("password");
+		if (x.type === "password") {
+			x.type = "text";
+		} else {
+			x.type = "password";
+		}
+	}
+</script>
+</html>

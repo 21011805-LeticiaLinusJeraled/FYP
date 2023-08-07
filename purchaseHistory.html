@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Techcentral - Purchase History</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<script src="/bootstrap/js/bootstrap.js"></script>
+<script 
+src="https://www.paypal.com/sdk/js?client-id=AVNwe7yo5Yg1WOLOf2p1igv7RLi70DwI7F4P3ggDEh4tOljwTFGdUC9VqqltPCGcGZRhGD8_kuc38OFE&currency=SGD&components=buttons">
+</script>
+<style>
+  select {
+    margin-bottom: 10px;
+  }
+
+  button {
+    padding: 8px 12px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header"></div>
+	<div class="container">
+		<table class="table">
+			<thead>
+				<tr>
+ 					<th scope="col">Seller</th> 
+ 					<th scope="col">Report Seller</th>
+					<th scope="col">Item</th>
+					<th scope="col">Image</th>
+					<th scope="col">Quantity</th>
+					<th scope="col">Transaction ID</th>
+					<th scope="col">Order ID</th>
+					<th scope="col">Ratings Reviews</th>
+					<th scope="col">Status</th>				
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="cartHistory : ${orderItemList}">
+    				<td th:text="${cartHistory.item.member.username}"></td>
+					<td>
+						<form
+							th:action="@{/member/report/{id}(id=${cartHistory.item.member.id})}" method="get">
+							<select name="reason">
+								<option value="spam">Persistent Non-Delivery</option>
+								<option value="inappropriate">Misrepresentation of Item Listed</option>
+								<option value="fraud">Price Gouging</option>
+							</select>
+							<button type="submit" value="Submit">Report</button>
+						</form>
+					</td>
+					<td th:text="${cartHistory.item.name}"></td>
+					<td><img width="80px"
+						th:src="@{/uploads/items/{id}/{imageName}(id=${cartHistory.item.id}, imageName=${cartHistory.item.imgName})}"></td>
+					<td th:text="${cartHistory.getQuantity()}"></td>
+					<td th:text="${cartHistory.transactionId}"></td>
+					<td th:text="${cartHistory.orderId}"></td>
+					<td><a href="/itemRR">For Item</a> 
+					<td>
+						<form
+							th:action="@{/cart/change_status/{id}(id=${cartHistory.id})}" method="post">
+							<input type="hidden" name="received" th:value="${!cartHistory.received}" />
+							<button type="submit" class="btn btn-success" th:attr="disabled=${cartHistory.received}">
+								<span th:if="${!cartHistory.received}">Received?</span> 
+								<span th:if="${cartHistory.received}" disabled>Received</span>
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div th:replace="fragments/footer"></div>
+</body>
+</html>

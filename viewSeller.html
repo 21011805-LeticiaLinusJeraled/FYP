@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Techcentrals - View Ban Users</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="/bootstrap/css/bootstrap.js"></script>
+</head>
+<div th:replace="fragments/style"></div>
+<div th:replace="fragments/header"></div>
+<style>
+table {
+    border-collapse: collapse;
+    width: 150%;
+    max-width: 2000px; /* Increased max-width for a bigger table */
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f8f8f8;
+  }
+
+  tr:hover {
+    background-color: #f2f2f2;
+  }
+
+  td {
+    border-bottom: 1px solid #ccc;
+  }
+
+  td:last-child {
+    border-right: none;
+  }
+
+  th:last-child {
+    border-right: none;
+  }
+/* Dropdown Button */
+.dropbtn {
+  background-color: #3498DB;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: right;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+</style>
+<body>
+  <div class="container">
+    <main>
+    <br>
+      <div class="h3">
+        <b>Ban User Dashboard</b>
+      </div>
+      <table class="table bordered">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Report Count</th>
+            <th><a sec:authorize="hasRole('ADMIN')">Ban</a></th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <tr th:each="member : ${memberList}">
+          <td th:text="${member.username}"></td>
+          <td th:text="${member.name}"></td>
+          <td th:text="${member.banCount}"></td>
+          <td>
+            <form sec:authorize="hasRole('ADMIN')" th:if="${member.banned}" th:action="@{/seller/unban/{id}(id=${member.id})}" method="post">
+              <button type="submit" class="btn btn-danger">Unban</button>
+            </form>
+             <form sec:authorize="hasRole('ADMIN')" th:unless="${member.banned}" th:action="@{/seller/ban/{id}(id=${member.id})}" method="post">
+              <button type="submit" class="btn btn-primary">Ban</button>
+            </form> </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mt-3">
+    </main>
+  </div>
+  <div th:replace="fragments/footer"></div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Techcentral - ERROR</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="icon" href="/images/main/TC.png" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="/bootstrap/js/bootstrap.js"></script>
+</head>
+<style>
+h2 {
+	text-align: center;
+	padding: 180px;
+}
+</style>
+<body>
+	<div th:replace="fragments/style"></div>
+	<div th:replace="fragments/header"></div>
+	<div class="container">
+		<main>
+			<h2>You are NOT authorised to view this page!</h2>
+		</main>
+	</div>
+	<div th:replace="fragments/footer"></div>
+</body>
+</html>
